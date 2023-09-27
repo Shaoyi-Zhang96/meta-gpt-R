@@ -54,23 +54,23 @@ for (i in 1:nrow(new_data_separated)) {
                     "in", cell_type, 
                     "be linked to", trait, 
                     "through biological pathways? Please respond with yes, maybe, or no and if applicable, provide a concise explanation of the plausible biological mechanisms.")
-  
+
+####This is the question format I am using, but feel free to change if you have a better way of asking (please also let me knwo..)
+
   # Append the sentence to the output vector
   querygpt1 <- c(querygpt1, sentence)
 }
-
 querygpt<- as.data.frame(querygpt1)
-
 setnames(querygpt, 'querygpt1', 'queries')
 
-querygpt <- querygpt[1:3,]
-querygpt <- as.data.frame(querygpt)
-setnames(querygpt, 'querygpt', 'queries')
+###################use the following three lines if you want to test it out first####
+#querygpt <- querygpt[1:3,]
+#querygpt <- as.data.frame(querygpt)
+#setnames(querygpt, 'querygpt', 'queries')
 
 ################################### Make the API call
 
-
-# Initialize an empty dataframe to store the outputs
+# Initialize an empty dataframe 
 output_df <- data.frame()
 
 # Loop through each row of the querygpt dataframe
@@ -106,7 +106,7 @@ for (query in querygpt$queries) {
   output_df <- rbind(output_df, column_v8)
 }
 
-# Rename the columns in the output_df if needed
+# Rename the columns
 colnames(output_df) <- NULL
 
 # Check if the number of rows in output_df and new_data_separated
@@ -120,3 +120,6 @@ if (nrow(output_df) < nrow(new_data_separated)) {
 }
 
 setnames(merged_df, 'output_df', 'results')
+
+#####write the output file to your desired directory if needed. 
+#writeLines(merged_df, "pubmed_output.txt")
