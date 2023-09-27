@@ -1,0 +1,122 @@
+Sys.setenv(OPENAI_API_KEY = "Your_API_KEY")
+
+Sys.setenv(LANGUAGE = "en")
+.libPaths("R4")
+
+library(data.table)
+library(readxl)
+library(tidyverse)
+library(rentrez)
+library(httr)
+library(dplyr)
+library(openai)
+
+##load and preprocess##
+data <- read_excel("shuang.xlsx")
+data <- data[, 1:4]
+
+##flatten##
+new_data <- data %>%
+  separate_rows(unique_new_gene, sep = ",")
+
+new_data <- new_data %>%
+  mutate(concatenated = paste(trait, celltype, unique_new_gene, sep = "+"))
+
+new_data_separated <- new_data %>%
+  separate(concatenated, into = c("trait", "celltype", "genes"), sep = "\\+")
+
+new_data_separated <- new_data_separated[, -(1:2)]
+
+###trait abbreviation to full name###
+lookup_table <- data.frame(
+  abbreviation = c("ALS", "PD", "AD", "ASD", "BiPo", "SZ", "SI", "DPW", "CPD", "AI", "SC"),
+  full_name = c("Amylotropic lateral sclerosis", "Parkinson’s disease", "Alzheimer’s disease", "Autism Spectrum Disorder", "Bipolar Disorder", "Schizophrenia", "Smoking cessation", "alcohol", "smoking", "smoking age", "Smoking cessation")
+)
+
+# Replace abbreviations in 'trait' column
+new_data_separated <- left_join(new_data_separated, lookup_table, by = c("trait" = "abbreviation")) %>%
+  mutate(trait = if_else(is.na(full_name), trait, full_name)) %>%
+  select(-full_name)
+
+##generate query
+new_data_separated <- new_data_separated %>%
+  mutate(queries = paste(trait, celltype, genes, sep = "\t"))
+
+querygpt1 <- character(0)
+
+# Loop through rows to generate sentences
+for (i in 1:nrow(new_data_separated)) {
+  gene <- new_data_separated[i, "genes"]
+  cell_type <- new_data_separated[i, "celltype"]
+  trait <- new_data_separated[i, "trait"]
+  
+  sentence <- paste("Can the gene", gene, 
+                    "in", cell_type, 
+                    "be linked to", trait, 
+                    "through biological pathways? Please respond with yes, maybe, or no and if applicable, provide a concise explanation of the plausible biological mechanisms.")
+  
+  # Append the sentence to the output vector
+  querygpt1 <- c(querygpt1, sentence)
+}
+
+querygpt<- as.data.frame(querygpt1)
+
+setnames(querygpt, 'querygpt1', 'queries')
+
+querygpt <- querygpt[1:3,]
+querygpt <- as.data.frame(querygpt)
+setnames(querygpt, 'querygpt', 'queries')
+
+################################### Make the API call
+
+
+# Initialize an empty dataframe to store the outputs
+output_df <- data.frame()
+
+# Loop through each row of the querygpt dataframe
+for (query in querygpt$queries) {
+  # Make the API call with the query
+  response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = list(
+      list(
+        "role" = "system",
+        "content" = ""
+      ),
+      list(
+        "role" = "user",
+        "content" = ""
+      ),
+      list(
+        "role" = "assistant",
+        "content" = ""
+      ),
+      list(
+        "role" = "user",
+        "content" = query # Use the current query from querygpt
+      )
+    )
+  )
+  
+  # Extract and store the relevant output
+  data <- as.data.frame(response)
+  column_v8 <- data[[8]]
+  
+  # Append the output to the output_df dataframe
+  output_df <- rbind(output_df, column_v8)
+}
+
+# Rename the columns in the output_df if needed
+colnames(output_df) <- NULL
+
+# Check if the number of rows in output_df and new_data_separated
+if (nrow(output_df) < nrow(new_data_separated)) {
+  new_data_separated <- new_data_separated[1:nrow(output_df), ]
+
+  merged_df <- cbind(output_df, new_data_separated)
+
+} else {
+  cat("Number of rows in output_df is greater than or equal to new_data_separated.")
+}
+
+setnames(merged_df, 'output_df', 'results')
