@@ -10,7 +10,8 @@ first column is the trait abbreviation (full trait name also accepted). Second c
 
 **If the trait provided in in abbreviation form, please provide a look up table in the form of this:**
 
-![image](https://github.com/Shaoyi-Zhang96/meta-gpt-R/assets/94341094/5b3698c0-94bb-4a63-b1f2-6cfddf2c7c94)
+abbreviation = c("ALS", "PD", "AD", "ASD", "BiPo", "SZ", "SI", "DPW", "CPD", "AI", "SC"),
+  full_name = c("Amylotropic lateral sclerosis", "Parkinson’s disease", "Alzheimer’s disease", "Autism Spectrum Disorder", "Bipolar Disorder", "Schizophrenia", "Smoking cessation", "alcohol", "smoking", "smoking age", "Smoking cessation")
 
 **In order to run this code, you will need your own Openai API key, which can be obtained here:**
 
