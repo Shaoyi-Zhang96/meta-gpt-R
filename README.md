@@ -1,7 +1,7 @@
 # meta-gpt-R
 This package integrates GPT-3.5-turbo into R to checks if genes can be related to traits and provides plausible biological explanations.
 
-required file format are:
+**required file formate:**
 
 ![image](https://github.com/Shaoyi-Zhang96/meta-gpt-R/assets/94341094/0b1a98cc-087b-49be-a4a1-d3f622979889)
 
