@@ -9,6 +9,7 @@ This package integrates GPT-3.5-turbo into R to checks if genes can be related t
 first column is the trait abbreviation (full trait name also accepted). Second column is the cell type information, third column are the genes of interest of particular trait in the particular cell type. There can be multiple genes for each trait/celltype pair, package is programmed to flatten it automatically. 
 
 **If the trait provided in in abbreviation form, please provide a look up table in the form of this:**
+For this particular metaanalysis, it is not needed since I have already inputted the dictionary###
 
 abbreviation = c("ALS", "PD", "AD", "ASD", "BiPo", "SZ", "SI", "DPW", "CPD", "AI", "SC"),
   full_name = c("Amylotropic lateral sclerosis", "Parkinson’s disease", "Alzheimer’s disease", "Autism Spectrum Disorder", "Bipolar Disorder", "Schizophrenia", "Smoking cessation", "alcohol", "smoking", "smoking age", "Smoking cessation")
