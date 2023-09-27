@@ -10,7 +10,8 @@ first column is the trait abbreviation (full trait name also accepted). Second c
 
 If the trait provided in in abbreviation form, please provide a look up table in the form of this:
 
-![image](https://github.com/Shaoyi-Zhang96/meta-gpt-R/assets/94341094/09b767e3-b105-40bb-9133-f070fd38f198)
+![image](https://github.com/Shaoyi-Zhang96/meta-gpt-R/assets/94341094/5b3698c0-94bb-4a63-b1f2-6cfddf2c7c94)
+
 
 
 
