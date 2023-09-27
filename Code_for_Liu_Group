@@ -1,6 +1,6 @@
 Sys.setenv(OPENAI_API_KEY = "Your_API_KEY")
 
-Sys.setenv(LANGUAGE = "en")
+###set your own R4 lib path here###
 .libPaths("R4")
 
 library(data.table)
@@ -12,7 +12,7 @@ library(dplyr)
 library(openai)
 
 ##load and preprocess##
-data <- read_excel("shuang.xlsx")
+data <- read_excel("shuang.xlsx") ###Here you can import your part of the project, but make sure to leave the column headers##
 data <- data[, 1:4]
 
 ##flatten##
@@ -31,7 +31,7 @@ new_data_separated <- new_data_separated[, -(1:2)]
 lookup_table <- data.frame(
   abbreviation = c("ALS", "PD", "AD", "ASD", "BiPo", "SZ", "SI", "DPW", "CPD", "AI", "SC"),
   full_name = c("Amylotropic lateral sclerosis", "Parkinson’s disease", "Alzheimer’s disease", "Autism Spectrum Disorder", "Bipolar Disorder", "Schizophrenia", "Smoking cessation", "alcohol", "smoking", "smoking age", "Smoking cessation")
-)
+) ###for this particular project, you don't need the abbreviation translate file, I have already done it here###
 
 # Replace abbreviations in 'trait' column
 new_data_separated <- left_join(new_data_separated, lookup_table, by = c("trait" = "abbreviation")) %>%
