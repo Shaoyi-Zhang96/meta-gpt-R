@@ -1,5 +1,5 @@
 # meta-gpt-R
-This package integrates GPT-3.5-turbo into R to bulk checks if genes can be related to traits and provides plausible biological explanations. It can submit an unlimited numver of gene-trait pairs at once so you would not have to manually submit queries to chatgpt.
+This package integrates GPT-3.5-turbo into R to bulk checks if genes can be related to traits and provides plausible biological explanations. It can submit an unlimited number of gene-trait pairs at once so you would not have to manually submit queries to chatgpt.
 
 **required file formate:**
 
